@@ -2,6 +2,8 @@
 
 ### Generate a Quiz From a CSV File
 
+**Note: The csv file will not load if you are on Windows and don't have Excel installed.**
+
 * Load a csv file with the following headers:
     * question
     * snippet
