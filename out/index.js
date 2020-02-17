@@ -1,1 +1,314 @@
-!function(){class t{constructor(t){this.question=t.question,this.answer=t.answer,t.snippet&&(this.snippet=t.snippet.replace(/\\n/g,"\n")),this.notAnswers=[];let e=1;for(;t[`false${e}`];)this.notAnswers.push(t[`false${e}`]),e++}}class e{constructor(){this.main=document.getElementsByTagName("main")[0],this.classes={correct:"correctAnswer"},this.hashes={start:"#start",load:"#convert",correct:"#correct",incorrect:"#wrong"}}}const n=new e,o=(t,e)=>{e.innerHTML="";const o=document.createRange().createContextualFragment('<div id="questionDiv"></div>'),s=o.querySelector("div"),r=document.createElement("h2");if(r.textContent=t.question,s.appendChild(r),t.snippet){const e=document.createElement("pre");e.textContent=t.snippet,s.appendChild(e)}let c=[];const a=document.createElement("a");a.textContent=t.answer,a.className=n.classes.correct,a.href=n.hashes.correct,c.push(a),t.notAnswers.forEach(t=>{const e=document.createElement("a");e.textContent=t,e.className="",e.href=n.hashes.incorrect,c.push(e)}),(c=(t=>{let e=t.length;for(;0!==e;){const n=Math.floor(Math.random()*e),o=t[e-=1];t[e]=t[n],t[n]=o}return t})(c)).forEach(t=>{s.appendChild(t)}),e.appendChild(o)},s=new e,r={},c=()=>{r.result={correct:0,incorrect:0,total:0}};c(),r.hintTimeout="";const a=()=>{((t,e)=>{const n={};t.onchange=()=>{const o=t.files[0];if("text/csv"===o.type||"application/vnd.ms-excel"===o.type){const t=new FileReader;t.onload=()=>{n.content=t.result,n.name=o.name.replace(/\.[^\.]+$/,""),e(n)},t.readAsText(o)}else console.log("Error: File type not accepted.")}})((t=>(t.innerHTML='<input type="file" id="fileInput" name="file" accept=".csv">',t.firstChild))(s.main),e=>{r.csvObject=(t=>{const e=/(?:[\t ]?)+("+)?(.*?)\1(?:[\t ]?)+(?:,|$)/gm,n=(t,e,n)=>e<n.length-1,o=(t=t.replace(/[\r]/g,"")).split("\n"),s=o.splice(0,1)[0].match(e).filter(t=>t.length>1);for(let t=0;t<s.length-1;t++)s[t]=s[t].slice(0,-1);const r=[];for(const t of o){const o={};for(const[r,c]of[...t.matchAll(e)].filter(n).entries())o[s[r]]=c[2].length>0?c[2]:null;Object.keys(o).length>0&&r.push(o)}return r})(e.content),r.remaining=[],r.csvObject.forEach(e=>{r.remaining.push(new t(e))}),i(),window.location.hash=""})},i=()=>{if(r.remaining&&r.remaining.length>0){const t=Math.floor(Math.random()*r.remaining.length);r.current=r.remaining.splice(t,1)[0],o(r.current,s.main),clearTimeout(r.hintTimeout),r.hintTimeout=setTimeout(()=>{(t=>{t.firstChild.classList.add("hint")})(s.main)},1e4)}else((t,e)=>{const n=Math.floor(t.correct/t.total*100);e.innerHTML="<p></p>",e.firstChild.textContent=`You got ${t.correct} correct, ${t.incorrect} wrong, out of a total of ${t.total}, which is a success rate of ${n}%`})(r.result,s.main),c();window.location.hash=""};window.onhashchange=()=>{const t=window.location.hash;t===s.hashes.load?a():t===s.hashes.start?i():t===s.hashes.correct?(r.result.correct++,r.result.total++,i()):t===s.hashes.incorrect?(r.result.incorrect++,r.result.total++,i()):console.log("Error: Unknown Hash.")}}();
+(function () {
+	'use strict';
+
+	// Expects array of objects with properties: question, answer, false[1-N]
+	class Question {
+		
+		constructor(flatQuestion) {
+			
+			this.question = flatQuestion.question;
+			this.answer = flatQuestion.answer;
+			if(flatQuestion.snippet) this.snippet = flatQuestion.snippet.replace(/\\n/g, "\n");
+			this.notAnswers = [];
+			
+			let i = 1;
+			while(flatQuestion[`false${i}`]) {
+				
+				this.notAnswers.push(flatQuestion[`false${i}`]);
+				i++;
+			}
+		}
+	}
+
+	const getCSV = (fileInput, callback) => {
+
+		const csvFile = {};
+
+		// 2 - Listen for loaded file
+		fileInput.onchange = () => {
+			
+		
+			// 3 - Get file metadata
+			const fileMeta = fileInput.files[0];
+		
+			// 4 - Check correct type
+			if (fileMeta.type === "text/csv" || fileMeta.type === "application/vnd.ms-excel") {
+				
+				// 5 - Set up FileReader and listen for file being read
+				const fileReader = new FileReader();
+				fileReader.onload = () => { 
+				
+					csvFile.content = fileReader.result;
+					csvFile.name = fileMeta.name.replace(/\.[^\.]+$/, "");	// Remove extension
+					
+					// 6 - PROMISE or promise would be better callback hell
+					callback(csvFile);
+				};
+				
+				// 5a - Read file as text and trigger callback
+				fileReader.readAsText(fileMeta);
+				
+			}
+			else {
+				console.log("Error: File type not accepted.");
+			}
+		};
+	};
+
+	const getObjectArrayFromCSV = (csvString) => {
+
+		// https://stackoverflow.com/questions/59218548/what-is-the-best-way-to-convert-from-csv-to-json-when-commas-and-quotations-may/59219146
+		const regex = /(?:[\t ]?)+("+)?(.*?)\1(?:[\t ]?)+(?:,|$)/gm;
+		const cutlast = (_, i, a) => i < a.length - 1;	
+
+		// 0 - Fix for Windows "\r\n" newlines
+		csvString = csvString.replace(/[\r]/g, "");
+
+		// 1 - Get array of lines	
+		const lines = csvString.split("\n");
+		
+		// 2 - Remove first line into headers, match regex and non-empty as properties, remove commas
+		const headers = lines.splice(0, 1)[0].match(regex).filter(h => h.length > 1);	
+		for (let i = 0; i < headers.length-1; i++) {
+			headers[i] = headers[i].slice(0, -1);
+		}
+		
+		// 3 - Get Values
+		const array = [];
+		for (const line of lines) {
+			
+			const val = {};
+			for (const [i, m] of [...line.matchAll(regex)].filter(cutlast).entries()) {
+				
+				val[headers[i]] = (m[2].length > 0) ? m[2] : null;
+			  
+			}
+			if(Object.keys(val).length > 0) array.push(val);
+		}
+		
+		return array;
+	};
+
+	const renderCSVForm = (element) => {
+		
+		element.innerHTML = '<input type="file" id="fileInput" name="file" accept=".csv">';
+		return element.firstChild;
+		
+	};
+
+	class Elements {
+		
+		constructor() {
+			
+			this.main = document.getElementsByTagName("main")[0];
+			
+			this.classes = {
+			
+				correct: "correctAnswer"
+				
+			};
+			
+			this.hashes = {
+				
+				start: "#start",
+				load: "#convert",
+				correct: "#correct",
+				incorrect: "#wrong"
+				
+			};
+
+		}
+		
+	}
+
+	const el = new Elements();
+
+	const shuffle = (array) => {
+		
+		let currentIndex = array.length;
+		
+		// While elements remain to be shuffled
+		while (currentIndex !== 0) {
+		
+			// 1 - Pick an element
+			const randomIndex = Math.floor(Math.random() * currentIndex);
+			currentIndex -= 1;
+			
+			// 2 - Swap with current element
+			const oldValue = array[currentIndex];
+			array[currentIndex] = array[randomIndex];
+			array[randomIndex] = oldValue;
+		
+		}
+		return array;
+	};
+
+	const renderQuestion = (question, element) => {
+
+		// 0 - Clear main
+		element.innerHTML = "";
+
+		// 1 - Create DOM fragment
+		const fragment = document.createRange().createContextualFragment('<div id="questionDiv"></div>');
+		const questionDiv = fragment.querySelector("div");
+
+		// 2 - Add Question
+		const h2 = document.createElement("h2");
+		h2.textContent = question.question;
+		questionDiv.appendChild(h2);
+		
+		// 2 - Check for snippet
+		if(question.snippet) {
+			const pre = document.createElement("pre");
+			pre.textContent=question.snippet;
+			questionDiv.appendChild(pre);
+		}
+
+		// 3 - Add correct answer to answers array
+		let answers = [];
+		const correct = document.createElement("a");
+		correct.textContent = question.answer;
+		correct.className = el.classes.correct;
+		correct.href = el.hashes.correct;
+		answers.push(correct);
+		
+		// 4 - Add incorrect answers
+		question.notAnswers.forEach(wrongAnswer => {
+			const a = document.createElement("a");
+			a.textContent = wrongAnswer;
+			a.className = "";
+			a.href = el.hashes.incorrect;
+			answers.push(a);
+		});
+
+		// 5 - Shuffle array
+		answers = shuffle(answers);
+		
+		// 6 - Add to fragment
+		answers.forEach((answer) => {
+			questionDiv.appendChild(answer);
+		});
+		
+		// 7 - Render
+		element.appendChild(fragment);
+	};
+
+	const renderResult = (result, element) => {
+		
+		const percent = Math.floor(result.correct/result.total*100);
+		
+		element.innerHTML = "<p></p>";
+		element.firstChild.textContent = `You got ${result.correct} correct, ${result.incorrect} wrong, out of a total of ${result.total}, which is a success rate of ${percent}%`;
+		
+	};
+
+	const addHintStyle = (element) => {
+
+		element.firstChild.classList.add("hint");
+		
+	};
+
+	const el$1 = new Elements();
+
+	const state = {};
+	const initResult = () => {
+		state.result = {
+			correct: 0,
+			incorrect: 0,
+			total: 0
+		};
+	};
+	initResult();
+	state.hintTimeout = "";
+
+	/*
+	window.el = el;
+	window.state = state;
+	*/
+
+	const convert = () => {
+		
+		// 1 - Render form & get file element
+		const fileInput = renderCSVForm(el$1.main);
+		
+		// 2 - Setup callback for csv data
+		getCSV( fileInput, (csvFile) => {
+			
+			// 1 - Get questions as object
+			state.csvObject = getObjectArrayFromCSV(csvFile.content);
+			
+			// 2 - Create remaining questions
+			state.remaining = [];
+			state.csvObject.forEach(csvQuestion => {
+				state.remaining.push(new Question(csvQuestion));
+			});
+		
+			// 3 - Render success
+			nextQuestion();
+			
+			// Reset hash
+			window.location.hash = "";
+			
+		});
+	};
+	const nextQuestion = () => {
+
+		// If questions left
+		if(state.remaining && state.remaining.length > 0 ) {
+			
+			// 1 - Choose random question and remove from array
+			const randomIndex = Math.floor(Math.random()*state.remaining.length);
+			state.current = state.remaining.splice(randomIndex, 1)[0];
+			
+			// 2 - Render Question
+			renderQuestion(state.current, el$1.main);
+			
+			// 3 - Countdown to hint highlight
+			clearTimeout(state.hintTimeout);
+			state.hintTimeout = setTimeout(() => { 
+				addHintStyle(el$1.main);
+			}, 10000);
+		}
+		else {
+			
+			// 1 - Render results
+			renderResult(state.result, el$1.main);
+		
+			// 2 - Reset counters
+			initResult();
+		}
+		
+		// Reset hash
+		window.location.hash = "";
+			
+	};
+
+	const correct = () => {	
+		state.result.correct++;
+		state.result.total++;
+		nextQuestion();
+	};
+
+	const incorrect = () => {
+		state.result.incorrect++;
+		state.result.total++;
+		nextQuestion();
+	};
+
+	// Listener for haschange
+	window.onhashchange = () => {
+
+		const hash = window.location.hash;
+
+	// 	if (hash === "") console.log("Action complete.")
+		if (hash === el$1.hashes.load) convert();
+		else if (hash === el$1.hashes.start) nextQuestion();
+		else if (hash === el$1.hashes.correct) correct();
+		else if (hash === el$1.hashes.incorrect) incorrect();
+		else {
+			console.log("Error: Unknown Hash.");
+		}
+		
+	};
+
+}());
