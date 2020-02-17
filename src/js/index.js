@@ -47,6 +47,17 @@ const convert = () => {
 		
 	});
 };
+
+const darkMode = () => {
+
+	// 1. Toggle class
+	el.body.classList.toggle("dark");
+	
+	// 2. Reset hash
+	window.location.hash = "";
+	
+};
+
 const nextQuestion = () => {
 
 	// If questions left
@@ -78,13 +89,11 @@ const nextQuestion = () => {
 	window.location.hash = "";
 		
 };
-
 const correct = () => {	
 	state.result.correct++;
 	state.result.total++;
 	nextQuestion();
 };
-
 const incorrect = () => {
 	state.result.incorrect++;
 	state.result.total++;
@@ -98,11 +107,11 @@ window.onhashchange = () => {
 
 // 	if (hash === "") console.log("Action complete.")
 	if (hash === el.hashes.load) convert();
-	else if (hash === el.hashes.start) nextQuestion();
+	else if (hash === el.hashes.dark) darkMode();
 	else if (hash === el.hashes.correct) correct();
 	else if (hash === el.hashes.incorrect) incorrect();
 	else {
-		console.log("Error: Unknown Hash.");
+// 		console.log("Error: Unknown Hash.");
 	}
 	
 };
