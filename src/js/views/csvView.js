@@ -10,7 +10,7 @@ export const getCSV = (fileInput, callback) => {
 		const fileMeta = fileInput.files[0];
 	
 		// 4 - Check correct type
-		if (fileMeta.type === "text/csv") {
+		if (fileMeta.type === "text/csv" || fileMeta.type === "application/vnd.ms-excel") {
 			
 			// 5 - Set up FileReader and listen for file being read
 			const fileReader = new FileReader();
