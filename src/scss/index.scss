@@ -1,0 +1,84 @@
+html * {
+	margin: 0;
+	padding: 0;
+	font-family: sans-serif;
+	font-weight: 300;
+	color: black;
+	text-decoration: none;
+	list-style-type: none;
+	box-sizing: border-box;	
+}
+
+header {
+	
+	background-color: #cacaca;
+	padding: 20px;
+	
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	
+	nav {
+		
+		display: flex;
+		justify-content: space-between;
+		
+		min-width: 150px;
+		
+		a {
+			color: black;
+		}
+		
+		a:hover {
+			color: #565656;
+		}
+	}
+	
+}
+
+main {
+	
+	margin: 20px;
+	
+	div {
+		
+		h2 {
+			margin-bottom: 10px;
+		}
+		
+		pre {
+			font-family: monospace;
+			background: #f4f4f4;
+			text-align: center;
+			
+			padding: 10px;
+			margin-bottom: 10px;
+		}
+		
+		a {
+			display: block;
+			margin-bottom: 5px;
+		}
+		
+		a:hover {
+			color: blue;
+		}
+		
+	}
+	
+	div.hint {
+		
+		a:hover {
+			
+			color: red;
+			
+		}
+		
+		a.correctAnswer:hover {
+			
+			color: green;
+			
+		}
+		
+	}
+}
