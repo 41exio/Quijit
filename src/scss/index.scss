@@ -1,3 +1,21 @@
+/* =====----- Home Style Sheet -----===== */
+
+/* ==========_____ VARIABLES _____========== */
+
+// Light Colours
+$headFootGrey: #cacaca;
+$navHover: #565656;
+
+// Dark Colours
+$headFootGrey: #cacaca;
+
+// Spacing
+$headFootSpace: 20px;
+
+/* ==========^^^^^^^^^^ END ^^^^^^^^^^========== */
+
+/* ==========_____ Main Styles _____========== */
+
 html * {
 	margin: 0;
 	padding: 0;
@@ -11,8 +29,8 @@ html * {
 
 header {
 	
-	background-color: #cacaca;
-	padding: 20px;
+	background-color: $headFootGrey;
+	padding: $headFootSpace;
 	
 	display: flex;
 	align-items: center;
@@ -30,13 +48,16 @@ header {
 		}
 		
 		a:hover {
-			color: #565656;
+			color: $navHover;
 		}
 	}
 	
 }
 
 body {
+	
+	position: relative;
+	height: 100vh;
 
 	main {
 		
@@ -75,6 +96,26 @@ body {
 			}
 			a.correctAnswer:hover {
 				color: green;
+			}
+		}
+	}
+	
+	footer {
+		
+		position: absolute;
+		bottom: 0;
+		width: 100%;
+		
+		padding: $headFootSpace;
+		
+		background-color: $headFootGrey;
+		
+		display: flex;
+		justify-content: space-between;
+		
+		div.hint {
+			a:hover{
+				color: $navHover;
 			}
 		}
 	}
@@ -120,7 +161,7 @@ body.dark {
 				color: green;
 			}
 		}	
-	}	
+	}
 }
 
 

@@ -1,5 +1,6 @@
 import Question from "./models/Question.js";
 
+import * as overView from "./views/overView.js";
 import * as csvView from "./views/csvView.js";
 import * as questionView from "./views/questionView.js";
 
@@ -23,6 +24,9 @@ window.state = state;
 */
 
 const convert = () => {
+	
+	// 0 - Reset counters
+	initResult();
 	
 	// 1 - Render form & get file element
 	const fileInput = csvView.renderCSVForm(el.main);
@@ -49,16 +53,36 @@ const convert = () => {
 };
 
 const darkMode = () => {
-
+	
 	// 1. Toggle class
-	el.body.classList.toggle("dark");
+	overView.toggleDark(el.body);
 	
 	// 2. Reset hash
 	window.location.hash = "";
 	
 };
+const toggleHint = () => {
+
+	// TODO: me
+	
+/*
+	// 1. Toggle class
+	overView.toggleHint(el.body);
+*/
+	
+	// Reset hash
+	window.location.hash = "";	
+};
 
 const nextQuestion = () => {
+	
+	// 0 - Update Progress
+	const progress = {
+		correct: state.result.correct,
+		incorrect: state.result.incorrect,
+		remaining: state.remaining.length
+	};
+	overView.updateProgress(progress, el.counter);
 
 	// If questions left
 	if(state.remaining && state.remaining.length > 0 ) {
@@ -108,6 +132,7 @@ window.onhashchange = () => {
 // 	if (hash === "") console.log("Action complete.")
 	if (hash === el.hashes.load) convert();
 	else if (hash === el.hashes.dark) darkMode();
+	else if (hash === el.hashes.toggleHint) toggleHint();
 	else if (hash === el.hashes.correct) correct();
 	else if (hash === el.hashes.incorrect) incorrect();
 	else {
