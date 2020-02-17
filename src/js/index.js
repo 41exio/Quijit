@@ -1,4 +1,5 @@
-import Question from "./models/Question.js";
+import Quijit from "./models/Quijit.js";
+// import Question from "./models/Question.js";
 
 import * as overView from "./views/overView.js";
 import * as csvView from "./views/csvView.js";
@@ -7,7 +8,35 @@ import * as questionView from "./views/questionView.js";
 import Elements from "./models/Elements.js";
 const el = new Elements();
 
+/* 
+
+	- Quijit Object
+		- Contains 3 arrays of question objects
+		- All loaded into remaining
+		- Random Q chosen
+		- Asked
+		- Then moved into either correct or incorrect 
+		- Until remaining is empty
+	
+	Quijit = {
+	
+		correct: [
+			{
+				question: "",
+				(snippet: "",)
+				answer: "";
+				notAnswers: ["",...,""]
+			},
+			{...}
+		],
+		incorrect: [...],
+		remaining: [...]
+	}
+*/ 
+
+
 const state = {};
+/*
 const initResult = () => {
 	state.result = {
 		correct: 0,
@@ -16,6 +45,7 @@ const initResult = () => {
 	};
 };
 initResult()
+*/
 state.hintTimeout = "";
 
 /*
@@ -26,25 +56,17 @@ window.state = state;
 
 const convert = () => {
 	
-	// 0 - Reset counters
-	initResult();
-	
 	// 1 - Render form & get file element
 	const fileInput = csvView.renderCSVForm(el.main);
 	
 	// 2 - Setup callback for csv data
 	csvView.getCSV( fileInput, (csvFile) => {
-		
-		// 1 - Get questions as object
-		state.csvObject = csvView.getObjectArrayFromCSV(csvFile.content);
-		
-		// 2 - Create remaining questions
-		state.remaining = [];
-		state.csvObject.forEach(csvQuestion => {
-			state.remaining.push(new Question(csvQuestion));
-		});
+
+		// 1 - Load CSV into Quijit
+		const csvObject = csvView.getObjectArrayFromCSV(csvFile.content);
+		state.quijit = new Quijit(csvObject);
 	
-		// 3 - Render success
+		// 2 - Load first question
 		nextQuestion();
 		
 		// Reset hash
@@ -78,22 +100,16 @@ const toggleHint = () => {
 const nextQuestion = () => {
 	
 	// 0 - Update Progress
-	const progress = {
-		correct: state.result.correct,
-		incorrect: state.result.incorrect,
-		remaining: state.remaining.length
-	};
-	overView.updateProgress(progress, el.counter);
+	overView.updateProgress(state.quijit.getResult(), el.counter);
 
 	// If questions left
-	if(state.remaining && state.remaining.length > 0 ) {
+	if(state.quijit.questionsRemain()) {
 		
-		// 1 - Choose random question and remove from array
-		const randomIndex = Math.floor(Math.random()*state.remaining.length);
-		state.current = state.remaining.splice(randomIndex, 1)[0];
+		// 1 - Load next question
+		state.quijit.loadNext();
 		
 		// 2 - Render Question
-		questionView.renderQuestion(state.current, el.main);
+		questionView.renderQuestion(state.quijit.current, el.main);
 		
 		// 3 - Countdown to hint highlight
 		clearTimeout(state.hintTimeout);
@@ -104,10 +120,10 @@ const nextQuestion = () => {
 	else {
 		
 		// 1 - Render results
-		questionView.renderResult(state.result, el.main);
+		questionView.renderResult(state.quijit.getResult(), el.main);
 	
 		// 2 - Reset counters
-		initResult();
+// 		initResult();
 	}
 	
 	// Reset hash
@@ -115,13 +131,11 @@ const nextQuestion = () => {
 		
 };
 const correct = () => {	
-	state.result.correct++;
-	state.result.total++;
+	state.quijit.answerWasCorrect(true);
 	nextQuestion();
 };
 const incorrect = () => {
-	state.result.incorrect++;
-	state.result.total++;
+	state.quijit.answerWasCorrect(false);
 	nextQuestion();
 };
 

@@ -72,13 +72,13 @@
 		"sC": 3,
 		"tS": 0
 		},
-	"/src/js/models/Question.js": {
+	"/src/js/models/Quijit.js": {
 		"bF": 4,
 		"ft": 64,
 		"ma": 0,
 		"mi": 0,
 		"oA": 1,
-		"oAP": "/out/DEFAULT/Question.js",
+		"oAP": "/out/DEFAULT/Quijit.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 0
@@ -148,7 +148,7 @@
 	"displayValueWasSetByUser": 0,
 	"iconImageName": "brackets-peach",
 	"iconImageWasSetByUser": 0,
-	"lastBuiltDate": 603659565.56973004
+	"lastBuiltDate": 603667567.61465096
 	},
 "projectSettings": {
 	"abortBuildOnError": 1,

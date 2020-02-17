@@ -1,7 +1,7 @@
 (function () {
 	'use strict';
 
-	// Expects array of objects with properties: question, answer, false[1-N]
+	// Expects array of objects with properties: question, (snippet), answer, false[1-N]
 	class Question {
 		
 		constructor(flatQuestion) {
@@ -18,6 +18,58 @@
 				i++;
 			}
 		}
+	}
+
+	class Quijit {
+		
+		constructor(csvObject) {
+			
+			this.remaining = [];
+			csvObject.forEach(csvQuestion => {
+				this.remaining.push(new Question(csvQuestion));
+			});
+			
+			this.correct = [];
+			this.incorrect = [];
+			
+		}
+		
+		loadNext() {
+			
+			// 1 - Choose random question
+			const randomIndex = Math.floor(Math.random()*this.remaining.length);
+			
+			// 2 - Move from remaining to current 
+			this.current = this.remaining.splice(randomIndex, 1)[0];
+		}
+		
+		questionsRemain() {
+				
+			return (this.remaining.length > 0) ? true : false;
+		
+		}
+		
+		getResult() {
+			return {
+				remaining: this.remaining.length,
+				correct: this.correct.length,
+				incorrect: this.incorrect.length,
+				total: this.remaining.length + this.correct.length + this.incorrect.length
+			}
+		}
+		
+		answerWasCorrect(isCorrect) {
+			
+			if (isCorrect) {
+				this.correct.push(this.current);
+			}
+			else {
+				this.incorrect.push(this.current);
+			}
+
+
+		}
+		
 	}
 
 	const toggleDark = (element) => {
@@ -229,7 +281,35 @@
 
 	const el$1 = new Elements();
 
+	/* 
+
+		- Quijit Object
+			- Contains 3 arrays of question objects
+			- All loaded into remaining
+			- Random Q chosen
+			- Asked
+			- Then moved into either correct or incorrect 
+			- Until remaining is empty
+		
+		Quijit = {
+		
+			correct: [
+				{
+					question: "",
+					(snippet: "",)
+					answer: "";
+					notAnswers: ["",...,""]
+				},
+				{...}
+			],
+			incorrect: [...],
+			remaining: [...]
+		}
+	*/ 
+
+
 	const state = {};
+	/*
 	const initResult = () => {
 		state.result = {
 			correct: 0,
@@ -237,7 +317,8 @@
 			total: 0
 		};
 	};
-	initResult();
+	initResult()
+	*/
 	state.hintTimeout = "";
 
 	window.el = el$1;
@@ -245,25 +326,17 @@
 
 	const convert = () => {
 		
-		// 0 - Reset counters
-		initResult();
-		
 		// 1 - Render form & get file element
 		const fileInput = renderCSVForm(el$1.main);
 		
 		// 2 - Setup callback for csv data
 		getCSV( fileInput, (csvFile) => {
-			
-			// 1 - Get questions as object
-			state.csvObject = getObjectArrayFromCSV(csvFile.content);
-			
-			// 2 - Create remaining questions
-			state.remaining = [];
-			state.csvObject.forEach(csvQuestion => {
-				state.remaining.push(new Question(csvQuestion));
-			});
+
+			// 1 - Load CSV into Quijit
+			const csvObject = getObjectArrayFromCSV(csvFile.content);
+			state.quijit = new Quijit(csvObject);
 		
-			// 3 - Render success
+			// 2 - Load first question
 			nextQuestion();
 			
 			// Reset hash
@@ -297,22 +370,16 @@
 	const nextQuestion = () => {
 		
 		// 0 - Update Progress
-		const progress = {
-			correct: state.result.correct,
-			incorrect: state.result.incorrect,
-			remaining: state.remaining.length
-		};
-		updateProgress(progress, el$1.counter);
+		updateProgress(state.quijit.getResult(), el$1.counter);
 
 		// If questions left
-		if(state.remaining && state.remaining.length > 0 ) {
+		if(state.quijit.questionsRemain()) {
 			
-			// 1 - Choose random question and remove from array
-			const randomIndex = Math.floor(Math.random()*state.remaining.length);
-			state.current = state.remaining.splice(randomIndex, 1)[0];
+			// 1 - Load next question
+			state.quijit.loadNext();
 			
 			// 2 - Render Question
-			renderQuestion(state.current, el$1.main);
+			renderQuestion(state.quijit.current, el$1.main);
 			
 			// 3 - Countdown to hint highlight
 			clearTimeout(state.hintTimeout);
@@ -323,10 +390,10 @@
 		else {
 			
 			// 1 - Render results
-			renderResult(state.result, el$1.main);
+			renderResult(state.quijit.getResult(), el$1.main);
 		
 			// 2 - Reset counters
-			initResult();
+	// 		initResult();
 		}
 		
 		// Reset hash
@@ -334,13 +401,11 @@
 			
 	};
 	const correct = () => {	
-		state.result.correct++;
-		state.result.total++;
+		state.quijit.answerWasCorrect(true);
 		nextQuestion();
 	};
 	const incorrect = () => {
-		state.result.incorrect++;
-		state.result.total++;
+		state.quijit.answerWasCorrect(false);
 		nextQuestion();
 	};
 
