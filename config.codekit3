@@ -54,18 +54,18 @@
 		"bF": 4,
 		"ft": 64,
 		"ma": 0,
-		"mi": 1,
+		"mi": 0,
 		"oA": 0,
 		"oAP": "/out/index.js",
 		"oF": 2,
 		"sC": 3,
-		"tS": 1
+		"tS": 0
 		},
 	"/src/js/models/Elements.js": {
 		"bF": 4,
 		"ft": 64,
 		"ma": 0,
-		"mi": 1,
+		"mi": 0,
 		"oA": 1,
 		"oAP": "/out/DEFAULT/Elements.js",
 		"oF": 0,
@@ -76,7 +76,7 @@
 		"bF": 4,
 		"ft": 64,
 		"ma": 0,
-		"mi": 1,
+		"mi": 0,
 		"oA": 1,
 		"oAP": "/out/DEFAULT/Question.js",
 		"oF": 0,
@@ -87,7 +87,7 @@
 		"bF": 4,
 		"ft": 64,
 		"ma": 0,
-		"mi": 1,
+		"mi": 0,
 		"oA": 1,
 		"oAP": "/out/DEFAULT/csvView.js",
 		"oF": 0,
@@ -98,7 +98,7 @@
 		"bF": 4,
 		"ft": 64,
 		"ma": 0,
-		"mi": 1,
+		"mi": 0,
 		"oA": 1,
 		"oAP": "/out/DEFAULT/overView.js",
 		"oF": 0,
@@ -109,7 +109,7 @@
 		"bF": 4,
 		"ft": 64,
 		"ma": 0,
-		"mi": 1,
+		"mi": 0,
 		"oA": 1,
 		"oAP": "/out/DEFAULT/questionView.js",
 		"oF": 0,
@@ -148,7 +148,7 @@
 	"displayValueWasSetByUser": 0,
 	"iconImageName": "brackets-peach",
 	"iconImageWasSetByUser": 0,
-	"lastBuiltDate": 603659371.17412603
+	"lastBuiltDate": 603659565.56973004
 	},
 "projectSettings": {
 	"abortBuildOnError": 1,
@@ -2046,9 +2046,9 @@
 		"autoOutputPathStyle": 1,
 		"bundleFormat": 4,
 		"createSourceMap": 0,
-		"minifyOutput": 1,
+		"minifyOutput": 0,
 		"syntaxCheckerStyle": 3,
-		"transpilerStyle": 1
+		"transpilerStyle": 0
 		},
 	"languageDefaultsJSON": {
 		"autoOutputAction": 0,

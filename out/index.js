@@ -1,1 +1,361 @@
-!function(){function t(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function e(t,e){return function(t){if(Array.isArray(t))return t}(t)||function(t,e){if(!(Symbol.iterator in Object(t)||"[object Arguments]"===Object.prototype.toString.call(t)))return;var n=[],r=!0,o=!1,i=void 0;try{for(var c,a=t[Symbol.iterator]();!(r=(c=a.next()).done)&&(n.push(c.value),!e||n.length!==e);r=!0);}catch(t){o=!0,i=t}finally{try{r||null==a.return||a.return()}finally{if(o)throw i}}return n}(t,e)||function(){throw new TypeError("Invalid attempt to destructure non-iterable instance")}()}function n(t){return function(t){if(Array.isArray(t)){for(var e=0,n=new Array(t.length);e<t.length;e++)n[e]=t[e];return n}}(t)||function(t){if(Symbol.iterator in Object(t)||"[object Arguments]"===Object.prototype.toString.call(t))return Array.from(t)}(t)||function(){throw new TypeError("Invalid attempt to spread non-iterable instance")}()}var r=function e(n){t(this,e),this.question=n.question,this.answer=n.answer,n.snippet&&(this.snippet=n.snippet.replace(/\\n/g,"\n")),this.notAnswers=[];for(var r=1;n["false".concat(r)];)this.notAnswers.push(n["false".concat(r)]),r++},o=function e(){t(this,e),this.body=document.getElementsByTagName("body")[0],this.main=document.getElementsByTagName("main")[0],this.counter={},this.counter.correct=document.querySelector("footer div.progress a.correct"),this.counter.incorrect=document.querySelector("footer div.progress a.incorrect"),this.counter.remaining=document.querySelector("footer div.progress a.remaining"),this.classes={correct:"correctAnswer"},this.hashes={dark:"#dark",toggleHint:"#toggleHint",load:"#convert",correct:"#correct",incorrect:"#wrong"}},i=new o,c=function(t,e){e.innerHTML="";var n=document.createRange().createContextualFragment('<div id="questionDiv"></div>'),r=n.querySelector("div"),o=document.createElement("h2");if(o.textContent=t.question,r.appendChild(o),t.snippet){var c=document.createElement("pre");c.textContent=t.snippet,r.appendChild(c)}var a=[],s=document.createElement("a");s.textContent=t.answer,s.className=i.classes.correct,s.href=i.hashes.correct,a.push(s),t.notAnswers.forEach((function(t){var e=document.createElement("a");e.textContent=t,e.className="",e.href=i.hashes.incorrect,a.push(e)})),(a=function(t){for(var e=t.length;0!==e;){var n=Math.floor(Math.random()*e),r=t[e-=1];t[e]=t[n],t[n]=r}return t}(a)).forEach((function(t){r.appendChild(t)})),e.appendChild(n)},a=new o,s={},l=function(){s.result={correct:0,incorrect:0,total:0}};l(),s.hintTimeout="";var u=function(){var t;l(),function(t,e){var n={};t.onchange=function(){var r=t.files[0];if("text/csv"===r.type||"application/vnd.ms-excel"===r.type){var o=new FileReader;o.onload=function(){n.content=o.result,n.name=r.name.replace(/\.[^\.]+$/,""),e(n)},o.readAsText(r)}else console.log("Error: File type not accepted.")}}(((t=a.main).innerHTML='<input type="file" id="fileInput" name="file" accept=".csv">',t.firstChild),(function(t){s.csvObject=function(t){for(var r=/(?:[\t ]?)+("+)?(.*?)\1(?:[\t ]?)+(?:,|$)/gm,o=function(t,e,n){return e<n.length-1},i=(t=t.replace(/[\r]/g,"")).split("\n"),c=i.splice(0,1)[0].match(r).filter((function(t){return t.length>1})),a=0;a<c.length-1;a++)c[a]=c[a].slice(0,-1);var s=[],l=!0,u=!1,h=void 0;try{for(var f,d=i[Symbol.iterator]();!(l=(f=d.next()).done);l=!0){var m=f.value,p={},g=!0,v=!1,y=void 0;try{for(var w,b=n(m.matchAll(r)).filter(o).entries()[Symbol.iterator]();!(g=(w=b.next()).done);g=!0){var C=e(w.value,2),x=C[0],A=C[1];p[c[x]]=A[2].length>0?A[2]:null}}catch(t){v=!0,y=t}finally{try{g||null==b.return||b.return()}finally{if(v)throw y}}Object.keys(p).length>0&&s.push(p)}}catch(t){u=!0,h=t}finally{try{l||null==d.return||d.return()}finally{if(u)throw h}}return s}(t.content),s.remaining=[],s.csvObject.forEach((function(t){s.remaining.push(new r(t))})),h(),window.location.hash=""}))},h=function(){var t,e,n;if(function(t,e){e.correct.textContent=t.correct,e.incorrect.textContent=t.incorrect,e.remaining.textContent=t.remaining}({correct:s.result.correct,incorrect:s.result.incorrect,remaining:s.remaining.length},a.counter),s.remaining&&s.remaining.length>0){var r=Math.floor(Math.random()*s.remaining.length);s.current=s.remaining.splice(r,1)[0],c(s.current,a.main),clearTimeout(s.hintTimeout),s.hintTimeout=setTimeout((function(){a.main.firstChild.classList.add("hint")}),1e4)}else t=s.result,e=a.main,n=Math.floor(t.correct/t.total*100),e.innerHTML="<p></p>",e.firstChild.textContent="You got ".concat(t.correct," correct, ").concat(t.incorrect," wrong, out of a total of ").concat(t.total,", which is a success rate of ").concat(n,"%"),l();window.location.hash=""};window.onhashchange=function(){var t=window.location.hash;t===a.hashes.load?u():t===a.hashes.dark?(a.body.classList.toggle("dark"),window.location.hash=""):t===a.hashes.toggleHint?window.location.hash="":t===a.hashes.correct?(s.result.correct++,s.result.total++,h()):t===a.hashes.incorrect&&(s.result.incorrect++,s.result.total++,h())}}();
+(function () {
+	'use strict';
+
+	// Expects array of objects with properties: question, answer, false[1-N]
+	class Question {
+		
+		constructor(flatQuestion) {
+			
+			this.question = flatQuestion.question;
+			this.answer = flatQuestion.answer;
+			if(flatQuestion.snippet) this.snippet = flatQuestion.snippet.replace(/\\n/g, "\n");
+			this.notAnswers = [];
+			
+			let i = 1;
+			while(flatQuestion[`false${i}`]) {
+				
+				this.notAnswers.push(flatQuestion[`false${i}`]);
+				i++;
+			}
+		}
+	}
+
+	const toggleDark = (element) => {
+		element.classList.toggle("dark");
+	};
+
+	const updateProgress = (progress, element) => {
+		
+		element.correct.textContent = progress.correct;
+		element.incorrect.textContent = progress.incorrect;
+		element.remaining.textContent = progress.remaining;
+			
+	};
+
+	const getCSV = (fileInput, callback) => {
+
+		const csvFile = {};
+
+		// 2 - Listen for loaded file
+		fileInput.onchange = () => {
+			
+		
+			// 3 - Get file metadata
+			const fileMeta = fileInput.files[0];
+		
+			// 4 - Check correct type
+			if (fileMeta.type === "text/csv" || fileMeta.type === "application/vnd.ms-excel") {
+				
+				// 5 - Set up FileReader and listen for file being read
+				const fileReader = new FileReader();
+				fileReader.onload = () => { 
+				
+					csvFile.content = fileReader.result;
+					csvFile.name = fileMeta.name.replace(/\.[^\.]+$/, "");	// Remove extension
+					
+					// 6 - PROMISE or promise would be better callback hell
+					callback(csvFile);
+				};
+				
+				// 5a - Read file as text and trigger callback
+				fileReader.readAsText(fileMeta);
+				
+			}
+			else {
+				console.log("Error: File type not accepted.");
+			}
+		};
+	};
+
+	const getObjectArrayFromCSV = (csvString) => {
+
+		// https://stackoverflow.com/questions/59218548/what-is-the-best-way-to-convert-from-csv-to-json-when-commas-and-quotations-may/59219146
+		const regex = /(?:[\t ]?)+("+)?(.*?)\1(?:[\t ]?)+(?:,|$)/gm;
+		const cutlast = (_, i, a) => i < a.length - 1;	
+
+		// 0 - Fix for Windows "\r\n" newlines
+		csvString = csvString.replace(/[\r]/g, "");
+
+		// 1 - Get array of lines	
+		const lines = csvString.split("\n");
+		
+		// 2 - Remove first line into headers, match regex and non-empty as properties, remove commas
+		const headers = lines.splice(0, 1)[0].match(regex).filter(h => h.length > 1);	
+		for (let i = 0; i < headers.length-1; i++) {
+			headers[i] = headers[i].slice(0, -1);
+		}
+		
+		// 3 - Get Values
+		const array = [];
+		for (const line of lines) {
+			
+			const val = {};
+			for (const [i, m] of [...line.matchAll(regex)].filter(cutlast).entries()) {
+				
+				val[headers[i]] = (m[2].length > 0) ? m[2] : null;
+			  
+			}
+			if(Object.keys(val).length > 0) array.push(val);
+		}
+		
+		return array;
+	};
+
+	const renderCSVForm = (element) => {
+		
+		element.innerHTML = '<input type="file" id="fileInput" name="file" accept=".csv">';
+		return element.firstChild;
+		
+	};
+
+	class Elements {
+		
+		constructor() {
+			
+			this.body = document.getElementsByTagName("body")[0];
+			this.main = document.getElementsByTagName("main")[0];
+			
+			this.counter = {};
+			this.counter.correct = document.querySelector("footer div.progress a.correct");
+			this.counter.incorrect = document.querySelector("footer div.progress a.incorrect");
+			this.counter.remaining = document.querySelector("footer div.progress a.remaining");
+			
+			this.classes = {
+			
+				correct: "correctAnswer"
+				
+			};
+			
+			this.hashes = {
+				
+				dark: "#dark",
+				toggleHint: "#toggleHint",
+				load: "#convert",
+				correct: "#correct",
+				incorrect: "#wrong"
+				
+			};
+
+		}
+		
+	}
+
+	const el = new Elements();
+
+	const shuffle = (array) => {
+		
+		let currentIndex = array.length;
+		
+		// While elements remain to be shuffled
+		while (currentIndex !== 0) {
+		
+			// 1 - Pick an element
+			const randomIndex = Math.floor(Math.random() * currentIndex);
+			currentIndex -= 1;
+			
+			// 2 - Swap with current element
+			const oldValue = array[currentIndex];
+			array[currentIndex] = array[randomIndex];
+			array[randomIndex] = oldValue;
+		
+		}
+		return array;
+	};
+
+	const renderQuestion = (question, element) => {
+
+		// 0 - Clear main
+		element.innerHTML = "";
+
+		// 1 - Create DOM fragment
+		const fragment = document.createRange().createContextualFragment('<div id="questionDiv"></div>');
+		const questionDiv = fragment.querySelector("div");
+
+		// 2 - Add Question
+		const h2 = document.createElement("h2");
+		h2.textContent = question.question;
+		questionDiv.appendChild(h2);
+		
+		// 2 - Check for snippet
+		if(question.snippet) {
+			const pre = document.createElement("pre");
+			pre.textContent=question.snippet;
+			questionDiv.appendChild(pre);
+		}
+
+		// 3 - Add correct answer to answers array
+		let answers = [];
+		const correct = document.createElement("a");
+		correct.textContent = question.answer;
+		correct.className = el.classes.correct;
+		correct.href = el.hashes.correct;
+		answers.push(correct);
+		
+		// 4 - Add incorrect answers
+		question.notAnswers.forEach(wrongAnswer => {
+			const a = document.createElement("a");
+			a.textContent = wrongAnswer;
+			a.className = "";
+			a.href = el.hashes.incorrect;
+			answers.push(a);
+		});
+
+		// 5 - Shuffle array
+		answers = shuffle(answers);
+		
+		// 6 - Add to fragment
+		answers.forEach((answer) => {
+			questionDiv.appendChild(answer);
+		});
+		
+		// 7 - Render
+		element.appendChild(fragment);
+	};
+
+	const renderResult = (result, element) => {
+		
+		const percent = Math.floor(result.correct/result.total*100);
+		
+		element.innerHTML = "<p></p>";
+		element.firstChild.textContent = `You got ${result.correct} correct, ${result.incorrect} wrong, out of a total of ${result.total}, which is a success rate of ${percent}%`;
+		
+	};
+
+	const addHintStyle = (element) => {
+
+		element.firstChild.classList.add("hint");
+		
+	};
+
+	const el$1 = new Elements();
+
+	const state = {};
+	const initResult = () => {
+		state.result = {
+			correct: 0,
+			incorrect: 0,
+			total: 0
+		};
+	};
+	initResult();
+	state.hintTimeout = "";
+
+	window.el = el$1;
+	window.state = state;
+
+	const convert = () => {
+		
+		// 0 - Reset counters
+		initResult();
+		
+		// 1 - Render form & get file element
+		const fileInput = renderCSVForm(el$1.main);
+		
+		// 2 - Setup callback for csv data
+		getCSV( fileInput, (csvFile) => {
+			
+			// 1 - Get questions as object
+			state.csvObject = getObjectArrayFromCSV(csvFile.content);
+			
+			// 2 - Create remaining questions
+			state.remaining = [];
+			state.csvObject.forEach(csvQuestion => {
+				state.remaining.push(new Question(csvQuestion));
+			});
+		
+			// 3 - Render success
+			nextQuestion();
+			
+			// Reset hash
+			window.location.hash = "";
+			
+		});
+	};
+
+	const darkMode = () => {
+		
+		// 1. Toggle class
+		toggleDark(el$1.body);
+		
+		// 2. Reset hash
+		window.location.hash = "";
+		
+	};
+	const toggleHint = () => {
+
+		// TODO: me
+		
+	/*
+		// 1. Toggle class
+		overView.toggleHint(el.body);
+	*/
+		
+		// Reset hash
+		window.location.hash = "";	
+	};
+
+	const nextQuestion = () => {
+		
+		// 0 - Update Progress
+		const progress = {
+			correct: state.result.correct,
+			incorrect: state.result.incorrect,
+			remaining: state.remaining.length
+		};
+		updateProgress(progress, el$1.counter);
+
+		// If questions left
+		if(state.remaining && state.remaining.length > 0 ) {
+			
+			// 1 - Choose random question and remove from array
+			const randomIndex = Math.floor(Math.random()*state.remaining.length);
+			state.current = state.remaining.splice(randomIndex, 1)[0];
+			
+			// 2 - Render Question
+			renderQuestion(state.current, el$1.main);
+			
+			// 3 - Countdown to hint highlight
+			clearTimeout(state.hintTimeout);
+			state.hintTimeout = setTimeout(() => { 
+				addHintStyle(el$1.main);
+			}, 10000);
+		}
+		else {
+			
+			// 1 - Render results
+			renderResult(state.result, el$1.main);
+		
+			// 2 - Reset counters
+			initResult();
+		}
+		
+		// Reset hash
+		window.location.hash = "";
+			
+	};
+	const correct = () => {	
+		state.result.correct++;
+		state.result.total++;
+		nextQuestion();
+	};
+	const incorrect = () => {
+		state.result.incorrect++;
+		state.result.total++;
+		nextQuestion();
+	};
+
+	// Listener for haschange
+	window.onhashchange = () => {
+
+		const hash = window.location.hash;
+
+	// 	if (hash === "") console.log("Action complete.")
+		if (hash === el$1.hashes.load) convert();
+		else if (hash === el$1.hashes.dark) darkMode();
+		else if (hash === el$1.hashes.toggleHint) toggleHint();
+		else if (hash === el$1.hashes.correct) correct();
+		else if (hash === el$1.hashes.incorrect) incorrect();
+		
+	};
+
+}());
