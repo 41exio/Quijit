@@ -2,7 +2,7 @@
 
 ## Generate a Quiz From a CSV File
 
-Load a csv file with the following headers:
+* Load a csv file with the following headers:
     * question
     * snippet
     * answer
