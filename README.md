@@ -16,7 +16,7 @@
 2. Download [index.js](https://github.com/41exio/Quijit/releases/latest/download/index.js)
 3. Open index.html with Chrome (might work in other browsers, let me know if any issues).
 4. Load in .csv file.
-5. Pray.
+5. Profit???
 
 #### Thanks
 
