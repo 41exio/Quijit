@@ -20,7 +20,13 @@ export default class Elements {
 			
 			dark: "#dark",
 			toggleHint: "#toggleHint",
+			
 			load: "#convert",
+			
+			showCorrect: "#showCorrect",
+			showIncorrect: "#showIncorrect",
+			continue: "#continue",
+			
 			correct: "#correct",
 			incorrect: "#wrong"
 			

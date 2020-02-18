@@ -11,8 +11,11 @@ const el = new Elements();
 /* 
 
 	- Quijit Object
-		- Contains 3 arrays of question objects
-		- All loaded into remaining
+		- Contains 4 arrays of question objects
+			- CVS loaded into remaining
+			- Correctly & incorrectly answered questions
+			- Currect question
+			- Next round questions
 		- Random Q chosen
 		- Asked
 		- Then moved into either correct or incorrect 
@@ -30,22 +33,16 @@ const el = new Elements();
 			{...}
 		],
 		incorrect: [...],
-		remaining: [...]
+		remaining: [...],
+		next: {
+			questions: [...],
+			contains: "correct" | "incorrect" | "all" | ""
+		}
 	}
 */ 
 
 
 const state = {};
-/*
-const initResult = () => {
-	state.result = {
-		correct: 0,
-		incorrect: 0,
-		total: 0
-	};
-};
-initResult()
-*/
 state.hintTimeout = "";
 
 /*
@@ -119,17 +116,63 @@ const nextQuestion = () => {
 	}
 	else {
 		
-		// 1 - Render results
-		questionView.renderResult(state.quijit.getResult(), el.main);
-	
-		// 2 - Reset counters
-// 		initResult();
+		// 0 - Don't do hint timeout
+		clearTimeout(state.hintTimeout);
+		
+		// 1 - Reset next
+		state.quijit.initNext();
+		
+		// 2 - Render results
+		// TODO: this too
+		state.quijit.getResult();
+		if (state.quijit.result.total > 0) {
+			questionView.renderResult(state.quijit, el.main);
+		}
+				// TODO: this too
+		else {
+			console.log("asdasda");
+			el.main.innerHTML = "<p>You selected no questions, load new CSV</p>";
+		}	
 	}
 	
 	// Reset hash
 	window.location.hash = "";
 		
 };
+const showCorrect = () => {
+	
+ 	// Toggle correct 
+ 	state.quijit.toggleCorrect();
+	
+	// Re-render results
+	questionView.renderResult(state.quijit, el.main);
+	
+	// Reset hash
+	window.location.hash = "";
+};
+const showIncorrect = () => {
+	
+ 	// Toggle incorrect 
+ 	state.quijit.toggleIncorrect();
+	
+	// Re-render results
+	questionView.renderResult(state.quijit, el.main);
+	
+	// Reset hash
+	window.location.hash = "";
+};
+const restart = () => {
+
+	// 1 - Load next into remain
+	state.quijit.restartWithNext();
+
+	nextQuestion();
+	
+	// Reset hash
+	window.location.hash = "";
+	
+};
+
 const correct = () => {	
 	state.quijit.answerWasCorrect(true);
 	nextQuestion();
@@ -146,10 +189,17 @@ window.onhashchange = () => {
 
 // 	if (hash === "") console.log("Action complete.")
 	if (hash === el.hashes.load) convert();
+	
 	else if (hash === el.hashes.dark) darkMode();
 	else if (hash === el.hashes.toggleHint) toggleHint();
+	
 	else if (hash === el.hashes.correct) correct();
 	else if (hash === el.hashes.incorrect) incorrect();
+	
+	else if (hash === el.hashes.showCorrect) showCorrect();
+	else if (hash === el.hashes.showIncorrect) showIncorrect();
+	else if (hash === el.hashes.continue) restart();
+	
 	else {
 // 		console.log("Error: Unknown Hash.");
 	}

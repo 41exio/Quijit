@@ -28,6 +28,7 @@ export default class Quijit {
 		
 		this.correct = [];
 		this.incorrect = [];
+		this.initNext();
 		
 	}
 	
@@ -47,12 +48,15 @@ export default class Quijit {
 	}
 	
 	getResult() {
-		return {
+		
+		this.result = {
 			remaining: this.remaining.length,
 			correct: this.correct.length,
 			incorrect: this.incorrect.length,
 			total: this.remaining.length + this.correct.length + this.incorrect.length
 		}
+		
+		return this.result;
 	}
 	
 	answerWasCorrect(isCorrect) {
@@ -67,5 +71,93 @@ export default class Quijit {
 
 	}
 	
+	toggleCorrect() {
+		
+		if (this.next.contains === "all") {
+			
+			this.next.contains = "incorrect";
+		} 
+		else if (this.next.contains === "incorrect") {
+			
+			this.next.contains = "all";
+		}
+		else if (this.next.contains === "correct") {
+			
+			this.next.contains = "";
+		}
+		else if (this.next.contains === "") {
+			
+			this.next.contains = "correct";
+		}
+		
+		this.setNextQuestions();
+	}
+	
+	toggleIncorrect() {
+		
+		if (this.next.contains === "all") {
+			
+			this.next.contains = "correct";
+		} 
+		else if (this.next.contains === "incorrect") {
+			
+			this.next.contains = "";
+		}
+		else if (this.next.contains === "correct") {
+			
+			this.next.contains = "all";
+		}
+		else if (this.next.contains === "") {
+			
+			this.next.contains = "incorrect";
+		}
+		
+		this.setNextQuestions();
+	}
+	
+	setNextQuestions() {
+		
+		if (this.next.contains === "all") {
+			
+			this.next.questions = this.correct;
+			this.next.questions = this.next.questions.concat(this.incorrect);
+		} 
+		else if (this.next.contains === "incorrect") {
+			
+			this.next.questions = this.incorrect;
+		}
+		else if (this.next.contains === "correct") {
+			
+			this.next.questions = this.correct;
+		}
+		else if (this.next.contains === "") {
+			
+			this.next.questions = [];
+		}
+		
+		
+	}
+	
+	restartWithNext() {
+		this.remaining = this.next.questions;
+		this.correct = [];
+		this.incorrect = [];
+	}
+	
+	initNext() {
+		this.next = {
+			contains: "",		// all, correct, incorrect, ""
+			questions: []
+		};
+	}
 }
+
+
+
+
+
+
+
+
+
 

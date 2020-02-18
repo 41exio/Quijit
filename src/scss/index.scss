@@ -2,12 +2,12 @@
 
 /* ==========_____ VARIABLES _____========== */
 
-// Light Colours
-$headFootGrey: #cacaca;
-$navHover: #565656;
+// Greys, light -> dark
 
-// Dark Colours
-$headFootGrey: #cacaca;
+$grey1: #f4f4f4;
+$grey2: #e4e4e4;
+$grey3: #cacaca;
+$grey4: #565656;
 
 // Spacing
 $headFootSpace: 20px;
@@ -27,43 +27,48 @@ html * {
 	box-sizing: border-box;	
 }
 
-header {
+body {
+
+    height: 100vh;
+    width: 100vw;
+
+    display: flex;
+    flex-direction: column;
 	
-	background-color: $headFootGrey;
-	padding: $headFootSpace;
-	
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	
-	nav {
+	header {
+		flex-shrink: 0;
+		
+		background-color: $grey3;
+		padding: $headFootSpace;
 		
 		display: flex;
+		align-items: center;
 		justify-content: space-between;
 		
-		min-width: 150px;
-		
-		a {
-			color: black;
-		}
-		
-		a:hover {
-			color: $navHover;
+		nav {
+			
+			display: flex;
+			justify-content: space-between;
+			
+			min-width: 150px;
+			
+			a {
+				color: black;
+			}
+			
+			a:hover {
+				color: $grey4;
+			}
 		}
 	}
 	
-}
-
-body {
-	
-	position: relative;
-	height: 100vh;
-
 	main {
 		
 		margin: 20px;
-		
-		div {
+	    overflow: auto;
+	    flex-grow: 1;
+	    
+		div.question {
 			
 			h2 {
 				margin-bottom: 10px;
@@ -89,7 +94,7 @@ body {
 			
 		}
 		
-		div.hint {
+		div.hint.question {
 			
 			a:hover {
 				color: red;
@@ -98,24 +103,56 @@ body {
 				color: green;
 			}
 		}
+		
+		div.results {
+			
+			text-align: center;
+			
+			nav {
+				display: flex;
+				justify-content: space-between;
+				margin: 0 5vw;
+				
+				a {
+					width: 100%;
+					text-align: center;
+					padding: 2px;
+					
+					background-color: $grey3;
+					
+					margin-right: 5px;				
+				}
+				
+				a:nth-child(3) {
+					background-color: white;
+					border: 1px solid $grey3;
+				}
+				
+				a:hover {
+					background-color: $grey2;
+				}
+				
+				a.active {
+					background-color: gray;
+				}
+			}	
+		}
 	}
 	
 	footer {
 		
-		position: absolute;
-		bottom: 0;
-		width: 100%;
+		flex-shrink: 0;
 		
-		padding: $headFootSpace;
+		padding: $headFootSpace;	
 		
-		background-color: $headFootGrey;
-		
+		background-color: $grey3;
+
 		display: flex;
 		justify-content: space-between;
 		
 		div.hint {
 			a:hover{
-				color: $navHover;
+				color: $grey4;
 			}
 		}
 	}
@@ -124,25 +161,17 @@ body {
 body.dark {
 	
 	background-color: black;
-	
+
 	main {
-		
-		p {
+
+		p, h2, a {
 			color: white;
 		}
 		
-		div {
-			
-			h2 {
-				color: white;
-			}
+		div.question {
 			
 			pre {
 				background: #e4e4e4;
-			}
-			
-			a {
-				color:white;
 			}
 			
 			a:hover {
@@ -151,7 +180,7 @@ body.dark {
 			
 		}
 		
-		div.hint {
+		div.hint.question {
 			
 			a:hover {
 				color: red;
@@ -160,7 +189,16 @@ body.dark {
 			a.correctAnswer:hover {
 				color: green;
 			}
-		}	
+		}
+		
+		div.results {
+			
+			nav {
+				a {
+					color: black;			
+				}
+			}	
+		}
 	}
 }
 

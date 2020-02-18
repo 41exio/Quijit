@@ -21,13 +21,10 @@ const shuffle = (array) => {
 	return array;
 }
 
-export const renderQuestion = (question, element) => {
-
-	// 0 - Clear main
-	element.innerHTML = "";
+const getQuestion = (question) => {
 
 	// 1 - Create DOM fragment
-	const fragment = document.createRange().createContextualFragment('<div id="questionDiv"></div>');
+	const fragment = document.createRange().createContextualFragment('<div class="question"></div>');
 	const questionDiv = fragment.querySelector("div");
 
 	// 2 - Add Question
@@ -54,7 +51,7 @@ export const renderQuestion = (question, element) => {
 	question.notAnswers.forEach(wrongAnswer => {
 		const a = document.createElement("a");
 		a.textContent = wrongAnswer;
-		a.className = "";
+		a.className = "answer";
 		a.href = el.hashes.incorrect;
 		answers.push(a);
 	});
@@ -67,16 +64,87 @@ export const renderQuestion = (question, element) => {
 		questionDiv.appendChild(answer);
 	});
 	
-	// 7 - Render
-	element.appendChild(fragment);
+	return fragment;
+	
 };
 
-export const renderResult = (result, element) => {
+export const renderQuestion = (question, element) => {
+
+	// 0 - Clear main
+	element.innerHTML = "";
+
+	// 1 - Render
+	element.appendChild(getQuestion(question));
+};
+
+export const renderResult = (quijit, element) => {
+
+	// 0 - Clear main
+	element.innerHTML = "";
+
+	// 1 - Create DOM fragment
+	const fragment = document.createRange().createContextualFragment('<div class="results"></div>');
+	const resultsDiv = fragment.querySelector("div");
+
+	// 1 - Add Summary
+	const percent = Math.floor(quijit.result.correct/quijit.result.total*100);
+	const pSummary = document.createElement("p");
+	pSummary.textContent = `You got ${quijit.result.correct} correct, ${quijit.result.incorrect} wrong, out of a total of ${quijit.result.total}, which is a success rate of ${percent}%.Select questions to view or restart quiz with:`;
+	resultsDiv.appendChild(pSummary);
 	
-	const percent = Math.floor(result.correct/result.total*100);
+	// 2 - Add nav
 	
-	element.innerHTML = "<p></p>";
-	element.firstChild.textContent = `You got ${result.correct} correct, ${result.incorrect} wrong, out of a total of ${result.total}, which is a success rate of ${percent}%`;
+	// TODO: This and Quijit next is garbage
+	
+	const nav = document.createElement("nav");
+	
+	let navAs = '<a href="#continue">Continue</a>';
+
+	if (quijit.next.contains === "all") {
+		
+		navAs = `<a class="active" href="#showCorrect">Correct</a><a class="active" href="#showIncorrect">Incorrect</a>${navAs}`;
+	} 
+	else if (quijit.next.contains === "incorrect") {
+		
+		navAs = `<a href="#showCorrect">Correct</a><a class="active" href="#showIncorrect">Incorrect</a>${navAs}`;
+	}
+	else if (quijit.next.contains === "correct") {
+		
+		navAs = `<a class="active" href="#showCorrect">Correct</a><a href="#showIncorrect">Incorrect</a>${navAs}`;
+	}
+	else if (quijit.next.contains === "") {
+		
+		navAs = `<a href="#showCorrect">Correct</a><a href="#showIncorrect">Incorrect</a>${navAs}`;
+	}
+	
+	nav.innerHTML = navAs;
+	const br = document.createElement("br");
+	resultsDiv.appendChild(br);
+	resultsDiv.appendChild(nav);
+	
+	// Render
+	element.appendChild(fragment);
+	
+	// 3 - Add Questions
+	quijit.next.questions.forEach( question => {
+		const br = document.createElement("br");
+		element.appendChild(br);
+		element.appendChild(getQuestion(question));
+	});
+	
+	// TODO: really fix this crap
+	
+	for (const tag of document.getElementsByTagName("a")) {
+		
+		if (tag.className === "answer") {
+			tag.href = "#";
+		}
+		else if (tag.className === "correctAnswer") {
+			tag.href = "#";
+			tag.style.fontWeight = "bold";
+		}
+	}
+
 	
 };
 
@@ -85,7 +153,3 @@ export const addHintStyle = (element) => {
 	element.firstChild.classList.add("hint");
 	
 };
-
-
-
-
