@@ -18,7 +18,7 @@
 * snippet is optional, you can probably have 1-9 false answers.
 
 ## To run:
-1. Download [index.html](https://github.com/41exio/Quijit/releases/latest/download/Quijit.zip)
+1. Download [Quijit](https://github.com/41exio/Quijit/releases/latest/download/Quijit.zip)
 2. Open index.html with Chrome (might work in other browsers, let me know if any issues).
 3. Load in .csv file.
 4. Profit???
