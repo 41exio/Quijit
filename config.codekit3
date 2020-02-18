@@ -25,6 +25,12 @@
 		"oAP": "/Quijit/LICENSE",
 		"oF": 1
 		},
+	"/Quijit": {
+		"ft": 65536,
+		"oA": 1,
+		"oAP": "/Quijit/Quijit",
+		"oF": 0
+		},
 	"/README.md": {
 		"cB": 0,
 		"cS": 0,
@@ -48,67 +54,67 @@
 		"bF": 4,
 		"ft": 64,
 		"ma": 0,
-		"mi": 1,
+		"mi": 0,
 		"oA": 0,
 		"oAP": "/Quijit/index.js",
 		"oF": 2,
 		"sC": 3,
-		"tS": 1
+		"tS": 0
 		},
 	"/src/js/models/Elements.js": {
 		"bF": 4,
 		"ft": 64,
 		"ma": 0,
-		"mi": 1,
+		"mi": 0,
 		"oA": 1,
 		"oAP": "/Quijit/DEFAULT/Elements.js",
 		"oF": 0,
 		"sC": 3,
-		"tS": 1
+		"tS": 0
 		},
 	"/src/js/models/Quijit.js": {
 		"bF": 4,
 		"ft": 64,
 		"ma": 0,
-		"mi": 1,
+		"mi": 0,
 		"oA": 1,
 		"oAP": "/Quijit/DEFAULT/Quijit.js",
 		"oF": 0,
 		"sC": 3,
-		"tS": 1
+		"tS": 0
 		},
 	"/src/js/views/csvView.js": {
 		"bF": 4,
 		"ft": 64,
 		"ma": 0,
-		"mi": 1,
+		"mi": 0,
 		"oA": 1,
 		"oAP": "/Quijit/DEFAULT/csvView.js",
 		"oF": 0,
 		"sC": 3,
-		"tS": 1
+		"tS": 0
 		},
 	"/src/js/views/overView.js": {
 		"bF": 4,
 		"ft": 64,
 		"ma": 0,
-		"mi": 1,
+		"mi": 0,
 		"oA": 1,
 		"oAP": "/Quijit/DEFAULT/overView.js",
 		"oF": 0,
 		"sC": 3,
-		"tS": 1
+		"tS": 0
 		},
 	"/src/js/views/questionView.js": {
 		"bF": 4,
 		"ft": 64,
 		"ma": 0,
-		"mi": 1,
+		"mi": 0,
 		"oA": 1,
 		"oAP": "/Quijit/DEFAULT/questionView.js",
 		"oF": 0,
 		"sC": 3,
-		"tS": 1
+		"tS": 0
 		},
 	"/src/kit/home.kit": {
 		"cB": 1,
@@ -142,7 +148,7 @@
 	"displayValueWasSetByUser": 1,
 	"iconImageName": "brackets-peach",
 	"iconImageWasSetByUser": 0,
-	"lastBuiltDate": 603721251.70765996
+	"lastBuiltDate": 603721454.596421
 	},
 "projectSettings": {
 	"abortBuildOnError": 1,
@@ -2040,9 +2046,9 @@
 		"autoOutputPathStyle": 1,
 		"bundleFormat": 4,
 		"createSourceMap": 0,
-		"minifyOutput": 1,
+		"minifyOutput": 0,
 		"syntaxCheckerStyle": 3,
-		"transpilerStyle": 1
+		"transpilerStyle": 0
 		},
 	"languageDefaultsJSON": {
 		"autoOutputAction": 0,

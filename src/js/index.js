@@ -45,10 +45,8 @@ const el = new Elements();
 const state = {};
 state.hintTimeout = "";
 
-/*
 window.el = el;
 window.state = state;
-*/
 
 
 const convert = () => {
