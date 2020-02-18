@@ -13,23 +13,17 @@
 		"cB": 0,
 		"ft": 8192,
 		"hM": 0,
-		"oA": 0,
-		"oAP": "/out/.gitignore",
-		"oF": 0
+		"oA": 1,
+		"oAP": "/Quijit/.gitignore",
+		"oF": 1
 		},
 	"/LICENSE": {
 		"cB": 0,
 		"ft": 8192,
 		"hM": 0,
 		"oA": 1,
-		"oAP": "/out/LICENSE",
+		"oAP": "/Quijit/LICENSE",
 		"oF": 1
-		},
-	"/out": {
-		"ft": 65536,
-		"oA": 1,
-		"oAP": "/out/out",
-		"oF": 0
 		},
 	"/README.md": {
 		"cB": 0,
@@ -41,7 +35,7 @@
 		"ft": 4096,
 		"hM": 0,
 		"oA": 1,
-		"oAP": "/out/README.html",
+		"oAP": "/Quijit/README.html",
 		"oF": 1,
 		"oFM": 0,
 		"oS": 0,
@@ -56,7 +50,7 @@
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "/out/index.js",
+		"oAP": "/Quijit/index.js",
 		"oF": 2,
 		"sC": 3,
 		"tS": 1
@@ -67,7 +61,7 @@
 		"ma": 0,
 		"mi": 1,
 		"oA": 1,
-		"oAP": "/out/DEFAULT/Elements.js",
+		"oAP": "/Quijit/DEFAULT/Elements.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 1
@@ -78,7 +72,7 @@
 		"ma": 0,
 		"mi": 1,
 		"oA": 1,
-		"oAP": "/out/DEFAULT/Quijit.js",
+		"oAP": "/Quijit/DEFAULT/Quijit.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 1
@@ -89,7 +83,7 @@
 		"ma": 0,
 		"mi": 1,
 		"oA": 1,
-		"oAP": "/out/DEFAULT/csvView.js",
+		"oAP": "/Quijit/DEFAULT/csvView.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 1
@@ -100,7 +94,7 @@
 		"ma": 0,
 		"mi": 1,
 		"oA": 1,
-		"oAP": "/out/DEFAULT/overView.js",
+		"oAP": "/Quijit/DEFAULT/overView.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 1
@@ -111,7 +105,7 @@
 		"ma": 0,
 		"mi": 1,
 		"oA": 1,
-		"oAP": "/out/DEFAULT/questionView.js",
+		"oAP": "/Quijit/DEFAULT/questionView.js",
 		"oF": 0,
 		"sC": 3,
 		"tS": 1
@@ -121,7 +115,7 @@
 		"ft": 2048,
 		"hM": 1,
 		"oA": 0,
-		"oAP": "/out/index.html",
+		"oAP": "/Quijit/index.html",
 		"oF": 2
 		},
 	"/src/scss/index.scss": {
@@ -132,7 +126,7 @@
 		"ft": 4,
 		"ma": 0,
 		"oA": 1,
-		"oAP": "/out/index.css",
+		"oAP": "/Quijit/index.css",
 		"oF": 0,
 		"oS": 3,
 		"uL": 1
@@ -145,10 +139,10 @@
 "projectAttributes": {
 	"creationDate": 603366828.13148606,
 	"displayValue": "Quijit",
-	"displayValueWasSetByUser": 0,
+	"displayValueWasSetByUser": 1,
 	"iconImageName": "brackets-peach",
 	"iconImageWasSetByUser": 0,
-	"lastBuiltDate": 603720237.97153103
+	"lastBuiltDate": 603721251.70765996
 	},
 "projectSettings": {
 	"abortBuildOnError": 1,
@@ -443,7 +437,7 @@
 	"browserRefreshDelay": 0,
 	"browserslistString": "defaults",
 	"buildFolderActive": 1,
-	"buildFolderName": "out",
+	"buildFolderName": "Quijit",
 	"cleanBuild": 1,
 	"coffeeLintFlags2": {
 		"arrow_spacing": {
@@ -1627,7 +1621,7 @@
 		},
 	"esLintSourceType": 0,
 	"externalServerAddress": "http://localhost:8888",
-	"gitIgnoreBuildFolder": 1,
+	"gitIgnoreBuildFolder": 0,
 	"hideConfigFile": 0,
 	"jsCheckerReservedNamesString": "",
 	"jsHintFlags2": {
@@ -2528,7 +2522,7 @@
 		},
 	"uglifyMangleNames": 1,
 	"uglifyReservedNamesString": "$,exports,require",
-	"websiteRelativeRoot": ""
+	"websiteRelativeRoot": "/Quijit"
 	},
 "settingsFileVersion": "3"
 }
