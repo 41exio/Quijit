@@ -25,6 +25,12 @@
 		"oAP": "/out/LICENSE",
 		"oF": 1
 		},
+	"/out": {
+		"ft": 65536,
+		"oA": 1,
+		"oAP": "/out/out",
+		"oF": 0
+		},
 	"/README.md": {
 		"cB": 0,
 		"cS": 0,
@@ -142,7 +148,7 @@
 	"displayValueWasSetByUser": 0,
 	"iconImageName": "brackets-peach",
 	"iconImageWasSetByUser": 0,
-	"lastBuiltDate": 603668256.56749594
+	"lastBuiltDate": 603720237.97153103
 	},
 "projectSettings": {
 	"abortBuildOnError": 1,
